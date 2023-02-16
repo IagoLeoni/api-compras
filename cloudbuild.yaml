@@ -11,19 +11,17 @@ steps:
   args: 
   - '-c'
   - |
-    docker run --name curl -L https://raw.githubusercontent.com/apigee/apigeecli/main/downloadLatest.sh | sh -
+    curl -L https://raw.githubusercontent.com/apigee/apigeecli/main/downloadLatest.sh | sh -
     export PATH={$_PATH}:{$_HOME}/.apigeecli/bin
 - name: gcr.io/cloud-builders/docker
   entrypoint: 'bash'
   args: 
   - '-c'
   - |
-    docker run --name apigeecli -v /workspace:/cicd apis create bundle --disable-check -n ${_PROXY_NAME} -p /cicd/apiproxy -o ${_ORG_NAME} -t ${token}
-    cat result.txt
-    cat result.txt | grep revision | sed 's/[^0-9]//g' - > /workspace/revision.txt
+     apigeecli -v /workspace:/cicd apis create bundle --disable-check -n ${_PROXY_NAME} -p /cicd/apiproxy -o ${_ORG_NAME} -t ${token}
 - name: gcr.io/cloud-builders/docker
   entrypoint: 'bash'
   args: 
   - '-c'
   - |
-    docker run --name apigeecli -e REV -v /workspace:/cicd apis deploy --disable-check -n ${_PROXY_NAME} -r -v $(cat /workspace/revision.txt) -o ${_ORG_NAME} -e ${_ENV_NAME} -t ${token}
+     apigeecli -e REV -v /workspace:/cicd apis deploy --disable-check -n ${_PROXY_NAME} -r -v $(cat /workspace/revision.txt) -o ${_ORG_NAME} -e ${_ENV_NAME} -t ${token}
