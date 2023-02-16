@@ -8,7 +8,7 @@ steps:
   - '-c'
   - |
     docker run --name curl -L https://raw.githubusercontent.com/apigee/apigeecli/main/downloadLatest.sh | sh -
-    export PATH=$PATH:$HOME/.apigeecli/bin
+    export PATH={$_PATH}:{$_HOME}/.apigeecli/bin
 - name: gcr.io/cloud-builders/docker
   entrypoint: 'bash'
   args: 
