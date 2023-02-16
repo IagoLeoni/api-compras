@@ -4,6 +4,8 @@ steps:
   args: 
   - '-c'
   - |
+      apt-get update -y
+      apt-get install zip unzip 
       export token=\"$(gcloud auth application-default \
           print-access-token)\"
 - name: gcr.io/cloud-builders/docker
