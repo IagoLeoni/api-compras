@@ -1,0 +1,16 @@
+<APIProxy revision="2" name="api-compras">
+    <DisplayName></DisplayName>
+    <Description></Description>
+    <CreatedAt>1676575296360</CreatedAt>
+    <LastModifiedAt>1676575296360</LastModifiedAt>
+    <BasePaths>/v1/compras</BasePaths>
+    <Policies>
+        <Policy>Verify-API-Key-1</Policy>
+    </Policies>
+    <ProxyEndpoints>
+        <ProxyEndpoint>default</ProxyEndpoint>
+    </ProxyEndpoints>
+    <TargetEndpoints>
+        <TargetEndpoint>default</TargetEndpoint>
+    </TargetEndpoints>
+</APIProxy>
