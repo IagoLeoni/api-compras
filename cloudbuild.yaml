@@ -1,7 +1,11 @@
 steps:
 - name: gcr.io/cloud-builders/gcloud
   entrypoint: 'bash'
-  args: [ '-c', "gcloud secrets versions access latest --secret=${_SECRET_NAME} --format='get(payload.data)' | tr '_-' '/+' | base64 -d > sa.json" ]
+  args: 
+  - '-c'
+  - |
+      export token=\"$(gcloud auth application-default \
+          print-access-token)\"
 - name: gcr.io/cloud-builders/docker
   entrypoint: 'bash'
   args: 
@@ -14,7 +18,7 @@ steps:
   args: 
   - '-c'
   - |
-    docker run --name apigeecli -v /workspace:/cicd apis create bundle --disable-check -n ${_PROXY_NAME} -p /cicd/apiproxy -o ${_ORG_NAME} -a /cicd/sa.json > result.txt
+    docker run --name apigeecli -v /workspace:/cicd apis create bundle --disable-check -n ${_PROXY_NAME} -p /cicd/apiproxy -o ${_ORG_NAME} -t ${token}
     cat result.txt
     cat result.txt | grep revision | sed 's/[^0-9]//g' - > /workspace/revision.txt
 - name: gcr.io/cloud-builders/docker
@@ -22,4 +26,4 @@ steps:
   args: 
   - '-c'
   - |
-    docker run --name apigeecli -e REV -v /workspace:/cicd apis deploy --disable-check -n ${_PROXY_NAME} -r -v $(cat /workspace/revision.txt) -o ${_ORG_NAME} -e ${_ENV_NAME} -a /cicd/sa.json
+    docker run --name apigeecli -e REV -v /workspace:/cicd apis deploy --disable-check -n ${_PROXY_NAME} -r -v $(cat /workspace/revision.txt) -o ${_ORG_NAME} -e ${_ENV_NAME} -t ${token}
