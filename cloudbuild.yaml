@@ -8,20 +8,20 @@ steps:
       apt-get install zip unzip 
       export token=\"$(gcloud auth application-default \
           print-access-token)\"
-- name: gcr.io/cloud-builders/docker
+- name: gcr.io/cloud-builders/gcloud
   entrypoint: 'bash'
   args: 
   - '-c'
   - |
     curl -L https://raw.githubusercontent.com/apigee/apigeecli/main/downloadLatest.sh | sh -
     export PATH={$_PATH}:{$_HOME}/.apigeecli/bin
-- name: gcr.io/cloud-builders/docker
+- name: gcr.io/cloud-builders/gcloud
   entrypoint: 'bash'
   args: 
   - '-c'
   - |
      apigeecli -v /workspace:/cicd apis create bundle --disable-check -n ${_PROXY_NAME} -p /cicd/apiproxy -o ${_ORG_NAME} -t ${token}
-- name: gcr.io/cloud-builders/docker
+- name: gcr.io/cloud-builders/gcloud
   entrypoint: 'bash'
   args: 
   - '-c'
